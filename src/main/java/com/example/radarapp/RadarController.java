@@ -41,7 +41,7 @@ public class RadarController {
     @FXML
     public void initialize() {
         Timeline timeline = new Timeline(
-                new KeyFrame(Duration.seconds(0.016), event -> {
+                new KeyFrame(Duration.seconds(0.05), event -> {
                     beamAngle += RADAR_BEAM_ANGLE_STEP;
                     if (beamAngle >= 360.0) {
                         beamAngle = 0.0;

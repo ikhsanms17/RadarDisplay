@@ -5,15 +5,14 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.Parent;
-import static javafx.fxml.FXMLLoader.load;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.stage.Stage;
 
 public class RadarApp extends Application {
 
@@ -25,24 +24,21 @@ public class RadarApp extends Application {
     private static final int WIDTH = 600;   // Width of the radar display
     private static final int HEIGHT = 600;  // Height of the radar display
 
-    public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("RadarView.fxml"));
-        primaryStage.setScene(new Scene(root));
-        primaryStage.setTitle("Radar Pendeteksi Benda");
-        primaryStage.show();
+    @Override
+    public void start(Stage primaryStage) {
+        Group root = new Group();
         Scene scene = new Scene(root, WIDTH, HEIGHT, Color.BLACK);
-        primaryStage.setScene(scene);
-        primaryStage.show();
 
         // Create radar circle
         Circle radarCircle = new Circle(WIDTH / 2, HEIGHT / 2, WIDTH / 2 - 50);
         radarCircle.setStroke(Color.GREEN);
         radarCircle.setStrokeWidth(2.0);
         radarCircle.setFill(null);
-        root.getChildrenUnmodifiable().add(radarCircle);
+        root.getChildren().add(radarCircle);
+
 
         // Create radar lines
-        for (int angle = 0; angle < 360; angle += 4) {
+        for (int angle = 0; angle < 360; angle += 90) {
             double startX = WIDTH / 2;
             double startY = HEIGHT / 2;
             double endX = WIDTH / 2 + (WIDTH / 2 - 50) * Math.sin(Math.toRadians(angle));
@@ -50,15 +46,17 @@ public class RadarApp extends Application {
 
             Line radarLine = new Line(startX, startY, endX, endY);
             radarLine.setStroke(Color.GREEN);
-            radarLine.setStrokeWidth(1);
+            radarLine.setStrokeWidth(2);
 
-            root.getChildrenUnmodifiable().add(radarLine);
+            root.getChildren().add(radarLine);
         }
-
+        // Create radar rounded
         Line radarBeam = new Line();
         radarBeam.setStroke(Color.GREEN);
-        radarBeam.setStrokeWidth(2.0);
-        root.getChildrenUnmodifiable().add(radarBeam);
+        root.getChildren().add(radarBeam);
+
+        // Create radar shadow line
+
 
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.seconds(0.05), event -> {
@@ -76,6 +74,10 @@ public class RadarApp extends Application {
         );
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+
+        primaryStage.setTitle("Radar App");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
